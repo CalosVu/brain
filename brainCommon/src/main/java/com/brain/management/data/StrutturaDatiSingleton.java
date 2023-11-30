@@ -6,25 +6,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.brain.management.exceptions.ErrorDeleteException;
 import com.brain.management.model.Dipendente;
+import com.github.javafaker.Faker;
 
 import lombok.Data;
 
 @Data
 public class StrutturaDatiSingleton {
 
-	private final Map<Integer, Dipendente> dipendenti = new HashMap<>();
+	private final Map<Long, Dipendente> dipendenti = new HashMap<>();
+	private long contatoreId = 0;
 
 	private static final StrutturaDatiSingleton instance = new StrutturaDatiSingleton();
 
 	private StrutturaDatiSingleton() {
+		final Faker fakeData = new Faker();
 
 		for (int i = 1; i <= 5; i++) {
 
-			Dipendente dipendente = new Dipendente("Nome_" + i, "Cognome_" + i, null, null);
-			dipendente.setDataNascita(generateRandomDate(1980, 2000));
-			dipendente.setDataAssunzione(generateRandomDate(1980, 2023));
-			dipendenti.put(i, dipendente);
+			contatoreId++;
+			Dipendente dipendente = new Dipendente(contatoreId, fakeData.name().firstName(), fakeData.name().lastName(),
+					generateRandomDate(1980, 2000), generateRandomDate(1998, 2023));
+			dipendenti.put(contatoreId, dipendente);
 		}
 	}
 
@@ -45,6 +49,22 @@ public class StrutturaDatiSingleton {
 	private int getRandomNumberInRange(int min, int max) {
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
+	}
+
+	public Long aggiungiDipendente(Dipendente dipendente) {
+		dipendente.setId(++contatoreId);
+		dipendenti.put(contatoreId, dipendente);
+		return contatoreId;
+	}
+
+	public void eliminaDipendente(Long id) throws ErrorDeleteException {
+
+		try {
+			dipendenti.remove(id);
+		} catch (Exception e) {
+			throw new ErrorDeleteException("Nessun è stato possibile cancellare il dipendente con id: [" + id
+					+ "]. Errore: " + e.getMessage());
+		}
 	}
 
 }
