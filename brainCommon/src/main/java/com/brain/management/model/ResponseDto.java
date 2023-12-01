@@ -3,8 +3,10 @@ package com.brain.management.model;
 import org.springframework.http.HttpStatus;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ResponseDto<E> {
 
 	private HttpStatus httpStatus;

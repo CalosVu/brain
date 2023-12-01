@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Dipendente {
 
 	private Long id;
