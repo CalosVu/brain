@@ -22,7 +22,7 @@ public class Dipendente {
 		this.cognome = cognome;
 		this.dataNascita = dataNascita;
 		this.dataAssunzione = dataAssunzione;
-	}
+	}	
 
 	@Override
 	public boolean equals(Object o) {
@@ -39,5 +39,6 @@ public class Dipendente {
 	public int hashCode() {
 		return Objects.hash(nome, cognome, dataNascita, dataAssunzione);
 	}
+	
 
 }

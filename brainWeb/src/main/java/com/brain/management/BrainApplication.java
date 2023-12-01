@@ -1,18 +1,15 @@
 package com.brain.management;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.brain.management.model.Dipendente;
-import com.brain.management.model.ResponseDto;
-import com.brain.management.utils.Constants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -25,34 +22,48 @@ public class BrainApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) throws JsonMappingException, JsonProcessingException {
 		SpringApplication.run(BrainApplication.class, args);
+	}
 
-		log.info("Applicazione avviata...");
+	@Bean
+	public CommandLineRunner run(ConfigurableApplicationContext applicationContext) {
+		return args -> {
+			log.info("Applicazione avviata...");
 
-		Long dipendenteId = 1L;
-		String url = Constants.getUrlDipendente + dipendenteId;
+			while (true) {
+				System.out.println("----------> Seleziona un'opzione:");
+				System.out.println("----------> 1. GetListaDipendenti");
+				System.out.println("----------> 2. GetDipendente");
+				System.out.println("----------> 3. AggiungiDipendente");
+				System.out.println("----------> 4. EliminaDipendente");
+				System.out.println("----------> 5. ModificaDipendente");
+				System.out.println("----------> 6. Exit");
 
-		RestTemplate restTemplate = new RestTemplate();
-		
-		ResponseEntity<ResponseDto<Dipendente>> responseEntity =
-		        restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<ResponseDto<Dipendente>>() {});
+				int scelta = UtilityMain.getScelta();
 
-		if (responseEntity.getStatusCode().is2xxSuccessful()) {
-		    ResponseDto<Dipendente> responseDto = responseEntity.getBody();
-		    Dipendente dipendente = responseDto.getResponse();
-
-		    System.out.println(dipendente);
-		} else {
-		    System.err.println("Errore nella chiamata API: " + responseEntity.getStatusCode());
-		}
-		
-		
-
-//
-//			// for (Dipendente dipendente : dipendenti) {
-//			System.out.println(dipendente);
-//			// }
-
-
+				switch (scelta) {
+				case 1:
+					UtilityMain.getListaDipendenti();
+					break;
+				case 2:
+					UtilityMain.getDipendente();
+					break;
+				case 3:
+					UtilityMain.aggiungiDipendente();
+					break;
+				case 4:
+					UtilityMain.eliminaDipendente();
+					break;
+				case 5:
+					UtilityMain.modificaDipendente();
+					break;
+				case 6:
+					System.exit(SpringApplication.exit(applicationContext));
+					break;
+				default:
+					System.out.println("----------> Opzione non valida. Riprova.");
+				}
+			}
+		};
 	}
 
 	@Bean
