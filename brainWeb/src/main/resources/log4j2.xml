@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<Property name="LOG_PATTERN">%d{dd-MM-yyyy HH:mm:ss} %-5p [%t] -
+			[%C{1}.%M:%L] : %m%n</Property>
+		<Property name="BASE_PATH">/brainLog/</Property>
+	</Properties>
+	<Appenders>
+
+		<RollingFile name="rollingInfo"
+			fileName="${BASE_PATH}/brainInfo.log"
+			filePattern="${BASE_PATH}/brainInfo-%d{yyyy-MM-dd}-%i.log.gz"
+			ignoreExceptions="false">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="100" />
+		</RollingFile>
+
+		<RollingFile name="rollingError"
+			fileName="${BASE_PATH}/brainError.log"
+			filePattern="${BASE_PATH}/brainError-%d{yyyy-MM-dd}-%i.log.gz"
+			ignoreExceptions="false">
+			<PatternLayout pattern="${LOG_PATTERN}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="100" />
+		</RollingFile>
+
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-2level %logger{30} - %msg%n" />
+		</Console>
+
+	</Appenders>
+	<Loggers>
+		<Logger name="com.brain.management" level="trace"
+			additivity="false">
+			<AppenderRef ref="rollingInfo" />
+		</Logger>
+		<Logger name="com.brain.management" level="debug">
+			<AppenderRef ref="rollingInfo" />
+		</Logger>
+		<Logger name="org.springframework" level="error"
+			additivity="false">
+			<AppenderRef ref="rollingError" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="org.hibernate.SQL" level="error"
+			additivity="false">
+			<AppenderRef ref="rollingError" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="org.hibernate" level="error" additivity="false">
+			<AppenderRef ref="rollingError" />
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Root level="info">
+			<AppenderRef ref="Console" level="info" />
+		</Root>
+	</Loggers>
+</Configuration>
