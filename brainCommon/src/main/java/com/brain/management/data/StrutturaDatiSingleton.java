@@ -36,7 +36,7 @@ public class StrutturaDatiSingleton {
 		return instance;
 	}
 
-	private LocalDate generateRandomDate(int startDate, int endDate) {
+	public LocalDate generateRandomDate(int startDate, int endDate) {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String dataRandom = String.format("%02d/%02d/%04d", getRandomNumberInRange(1, 31),
